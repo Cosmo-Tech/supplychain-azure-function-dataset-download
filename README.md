@@ -7,18 +7,8 @@ This Supply Chain specific version is based on the [Cosmotech Azure function Sce
 
 This azure function app aims to be integrated in the Cosmo Tech Supply Chain Web-app : [azure-supplychain-webapp](https://github.com/Cosmo-Tech/azure-supplychain-webapp) for Cosmo Tech internal use or [azure-supplychain-webapp-shared](https://github.com/Cosmo-Tech/azure-supplychain-webapp-shared) for external use
 
-# Build
 
-## How to build a deployable file
-
-Running the following commands in a terminal will create a file `Artifact.zip` which can then be used for deployment 
-
-```bash
-pip install --target .python_packages/lib/site-packages/ -r requirements.txt
-zip -r artifact.zip . -x ".git/*" ".github/*" ".gitignore"
-```
-
-# Deploy 
+# Deploy the generic Supply Chain Azure Function App
 
 ## Pre-Requisites
 
@@ -123,3 +113,52 @@ Example with the demand plan table
     azureFunctionHeaders: { 'x-functions-key': '<default host keys>' },
   }
 ```
+
+
+
+# Build and deploy the function app using a specific Supply Chain library version 
+
+## Change the Supply Chain Library dependency
+
+By default, the azure function app references the Cosmo-Tech Supply Chain generic PyPi package [CosmoTech-SupplyChain](https://pypi.org/project/CosmoTech-SupplyChain/) from the [requirements.txt](./requirements.txt) file
+
+In case, you need to use your own library version, you need to change this dependency by pointing to your own PyPi package or your specific git repository, like for exemple `git+ssh://git@github.com/<your repo>/supplychain-python-library.git@main#egg=SupplyChain`.
+
+**Note** : in the azure function references in the [requirements.txt](./requirements.txt) file, you have to leave the dependency to the PyPi package `CosmoTech-Acceleration-Library` unchanged since this is one is generic.
+
+
+## Build the specific azure function
+
+The generic azure comes with an GitHub action allowing to automate its build and the generation of the artifact  `Artifact.zip`.
+This automatic build is facilitated by the fact that the generic PyPi package is public.
+
+When you change the library dependency to a private repository, you need to put in place credentials management to use your own repository.
+You may find easier to simply build the azure function locally (using your git credentials)
+
+```bash
+pip install --target .python_packages/lib/site-packages/ -r requirements.txt
+zip -r artifact.zip . -x ".git/*" ".github/*" ".gitignore"
+```
+
+## Deploy the new specific Azure Function version
+
+
+In order to deploy the new artifact, you have to make it accessible for deployment from the azure function app instance through an https URL.
+
+- if the build can be automated, URL can point to a GitHub release (like the generic azure function)<br />
+Example URL : https://github.com/Cosmo-Tech/supplychain-azure-function-dataset-download/releases/download/2.2.2/artifact.zip
+
+- if not, the artifact zip file can be copied to an azure blob storage<br />
+example URL : https://myblobstorage.blob.core.windows.net/content/artifact.zip?st=2018-02-13T09%3A48%3A00Z&se=2044-06-14T09%3A48%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=bNrVrEFzRHQB17GFJ7boEanetyJ9DGwBSV8OM3Mdh%2FM%3D
+
+
+
+Then to deploy the new artifact version, go to the azure function app settings in the Azure portal.<br />
+Change the `WEBSITE_RUN_FROM_PACKAGE` parameter with the new artifact URL.
+
+Or execute the following command from the Azure CLI
+```bash
+az webapp config appsettings set --name <function app name> --resource-group <resource group name> --settings WEBSITE_RUN_FROM_PACKAGE=<URL>
+```
+
+**Note** : The function app automatically restarts after a configuration change.
