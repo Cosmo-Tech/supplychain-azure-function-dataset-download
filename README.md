@@ -5,7 +5,13 @@ The **_supplychain-azure-function-dataset-download_** is a specialization for th
 
 This Supply Chain specific version is based on the [Cosmotech Azure function Scenario Download](https://github.com/Cosmo-Tech/azure-function-scenario-download)
 
-This azure function app aims to be integrated in the Cosmo Tech Supply Chain Web-app : [azure-supplychain-webapp](https://github.com/Cosmo-Tech/azure-supplychain-webapp) for Cosmo Tech internal use or [azure-supplychain-webapp-shared](https://github.com/Cosmo-Tech/azure-supplychain-webapp-shared) for external use
+
+This azure function app aims to be integrated in the Cosmo Tech Supply Chain Web-app : [azure-supplychain-webapp](https://github.com/Cosmo-Tech/azure-supplychain-webapp) for Cosmo Tech internal use or [azure-supplychain-webapp-shared](https://github.com/Cosmo-Tech/azure-supplychain-webapp-shared) for external use.
+
+The azure function allows the web-app to get the data associated to a given scenario, including parameters and datasets of types :
+- Azure Digital Twin
+- Cosmo Tech Twin Cache
+- Storage (lever files)
 
 
 # Deploy the generic Supply Chain Azure Function App
