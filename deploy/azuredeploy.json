@@ -25,7 +25,7 @@
     },
     "csmApiHost": {
       "type": "string",
-      "defaultValue": "https://dev.api.cosmotech.com",
+      "defaultValue": "https://dev.api.cosmotech.com/v2",
       "metadata": {
         "description": "Cosmo Tech API host"
       }
