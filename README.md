@@ -24,7 +24,7 @@ The azure function allows the web-app to get the data associated to a given scen
 
 ### Dedicated app registration :
 1. Create a new app registration
-2. Add a API permission to the Cosmo Tech Platform API, choose the permission type *_Application_* (not *_Delegated_*) and select the permission *_Organization.user_*
+2. Add a API permission to the Cosmo Tech Platform API, choose the permission type *_Application_* (not *_Delegated_*) and select the permission *_Platform.Admin_*
 3. Create a client secret
 4. In the related Azure Digital Twins resources, assign the role _Azure Digital Twin Data Reader_  to app registration 
 <br><br>
