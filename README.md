@@ -75,7 +75,7 @@ This keys being included in the web application, we need a second layer of secur
 - Add identity provider
 - Select "Microsoft"
 - In "App registration type", select "Pick an existing app registration in this directory"
-- Name or app ID : enter the web application name.<br>
+- Name or app ID : enter the aap registration of web application name.<br>
 **Note** : You may need to enter the app registration ID created for the webapp instead of its name. And in this case, you will have to create a secret for the app registration of the web app and provide it here.
 <br>
 
