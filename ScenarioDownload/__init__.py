@@ -115,4 +115,4 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
     return writer.files
 
 
-main = generate_main(apply_update=apply_update)
+main = generate_main(apply_update=apply_update, parallel=False)
