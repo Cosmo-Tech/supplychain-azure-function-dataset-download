@@ -47,7 +47,7 @@ The azure function allows the web-app to get the data associated to a given scen
 | Csm Api Scope        | Scope for accessing the Cosmo Tech Platform API (must end with /.default)                                                                                                                                                                  |
 | Az Cli ID	           | Client ID of the dedicated app registration (see pre-requisites)                                                                                                                                                                           |
 | Az Cli Secret        | Client Secret create of the dedicated app registration (see pre-requisites)                                                                                                                                                                |
-| Package Address      | URL of the Azure function package to be deployed  - IMPORTANT : pick the URL from the latest release, ex [release 2.1.10](https://github.com/Cosmo-Tech/supplychain-azure-function-dataset-download/releases/download/2.1.10/artifact.zip) |
+| Package Address      | URL of the Azure function package to be deployed  - IMPORTANT : pick the URL from the latest release, ex [release x.y.z](https://github.com/Cosmo-Tech/supplychain-azure-function-dataset-download/releases/download/x.y.z/artifact.zip) |
 
 <br>
 
@@ -152,7 +152,7 @@ zip -r artifact.zip . -x ".git/*" ".github/*" ".gitignore"
 In order to deploy the new artifact, you have to make it accessible for deployment from the azure function app instance through an https URL.
 
 - if the build can be automated, URL can point to a GitHub release (like the generic azure function)<br />
-Example URL : https://github.com/Cosmo-Tech/supplychain-azure-function-dataset-download/releases/download/2.2.2/artifact.zip
+Example URL : https://github.com/Cosmo-Tech/supplychain-azure-function-dataset-download/releases/download/x.y.z/artifact.zip
 
 - if not, the artifact zip file can be copied to an azure blob storage<br />
 example URL : https://myblobstorage.blob.core.windows.net/content/artifact.zip?st=2018-02-13T09%3A48%3A00Z&se=2044-06-14T09%3A48%3A00Z&sp=rl&sv=2017-04-17&sr=b&sig=bNrVrEFzRHQB17GFJ7boEanetyJ9DGwBSV8OM3Mdh%2FM%3D
