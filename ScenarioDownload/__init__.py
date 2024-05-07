@@ -15,7 +15,7 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
     dataset_content = content
     # Apply you transformation here
     for dataset_id, dataset in content['datasets'].items():
-        if dataset['type'] == 'adt':
+        if dataset['type'] in ['adt', 'twincache']:
             dataset_content = dataset['content']
             continue
         if dataset['name'] == 'mass_lever_excel_file':
@@ -36,12 +36,15 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
     parameters = []
 
     for parameter_name, value in content['parameters'].items():
+
         def add_file_parameter(compared_parameter_name: str):
             if parameter_name == compared_parameter_name:
-                param_dir = os.path.join(tmp_parameter_dir, compared_parameter_name)
+                param_dir = os.path.join(tmp_parameter_dir,
+                                         compared_parameter_name)
                 os.mkdir(param_dir)
                 _writer = CSVWriter(output_folder=param_dir)
-                param_content = content['datasets'][value]['content']['content']
+                param_content = content['datasets'][value]['content'][
+                    'content']
                 _writer.write_from_list(param_content, 'content')
                 parameters.append({
                     "parameterId": parameter_name,
@@ -69,9 +72,7 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
     reader.files = dataset_content
     writer = MemoryFolderIO()
 
-    handler = DictPatcher(reader=reader,
-                          writer=writer,
-                          parameters=_p)
+    handler = DictPatcher(reader=reader, writer=writer, parameters=_p)
 
     configuration = handler.memory.files['Configuration'][0]
     if scenario_data['run_template_id'] == "Lever":
