@@ -1,10 +1,12 @@
 from CosmoTech_Acceleration_Library.Accelerators.scenario_download.azure_function_main import generate_main
+from cosmotech_api import Scenario
+
 from ScenarioDownload import apply_update as update_dataset
 from Supplychain.Generic.memory_folder_io import MemoryFolderIO
 from Supplychain.Transform.from_dict_to_table import FromDictToTableConverter
 
 
-def apply_update(content: dict, scenario_data: dict) -> dict:
+def apply_update(content: dict, scenario_data: Scenario) -> dict:
     updated_dataset = update_dataset(content, scenario_data)
 
     # Default values to avoid error 500 if time info were not filed

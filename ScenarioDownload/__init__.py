@@ -1,17 +1,17 @@
-from CosmoTech_Acceleration_Library.Accelerators.scenario_download.azure_function_main import generate_main
+import json
+import os
+import tempfile
 
+from CosmoTech_Acceleration_Library.Accelerators.scenario_download.azure_function_main import generate_main
+from Supplychain.Generic.cosmo_api_parameters import CosmoAPIParameters
+from Supplychain.Generic.csv_folder_writer import CSVWriter
 from Supplychain.Generic.memory_folder_io import MemoryFolderIO
 from Supplychain.Transform.from_table_to_dict import FromTableToDictConverter
-from Supplychain.Generic.cosmo_api_parameters import CosmoAPIParameters
 from Supplychain.Transform.patch_dict_with_parameters import DictPatcher
-from Supplychain.Generic.csv_folder_writer import CSVWriter
-
-import tempfile
-import os
-import json
+from cosmotech_api import Scenario
 
 
-def apply_update(content: dict, scenario_data: dict) -> dict:
+def apply_update(content: dict, scenario_data: Scenario) -> dict:
     dataset_content = content
     # Apply you transformation here
     for dataset_id, dataset in content['datasets'].items():
@@ -75,9 +75,9 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
     handler = DictPatcher(reader=reader, writer=writer, parameters=_p)
 
     configuration = handler.memory.files['Configuration'][0]
-    if scenario_data['run_template_id'] == "Lever":
+    if scenario_data.run_template_id == "Lever":
         configuration['EnforceProductionPlan'] = True
-    elif scenario_data['run_template_id'] == "MILPOptimization":
+    elif scenario_data.run_template_id == "MILPOptimization":
         _p.update_parameters([
             {
                 'parameterId': 'stock_policy',
@@ -97,7 +97,7 @@ def apply_update(content: dict, scenario_data: dict) -> dict:
         ])
         configuration['EnforceProductionPlan'] = False
         handler.handle_optimization_parameter()
-    elif scenario_data['run_template_id'] == "UncertaintyAnalysis":
+    elif scenario_data.run_template_id == "UncertaintyAnalysis":
         configuration['EnforceProductionPlan'] = True
         configuration['ActivateUncertainties'] = True
         handler.handle_uncertainties_settings()
