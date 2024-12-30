@@ -79,7 +79,7 @@
         "enabled": true,
         "reserved": true,
         "siteConfig": {
-          "linuxFxVersion": "python|3.9",
+          "linuxFxVersion": "Python|3.11",
           "appSettings": [
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
