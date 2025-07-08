@@ -7,26 +7,39 @@ from Supplychain.Generic.cosmo_api_parameters import CosmoAPIParameters
 from Supplychain.Generic.csv_folder_writer import CSVWriter
 from Supplychain.Generic.memory_folder_io import MemoryFolderIO
 from Supplychain.Transform.from_table_to_dict import FromTableToDictConverter
+from Supplychain.Transform.from_dict_to_table import FromDictToTableConverter
 from Supplychain.Transform.patch_dict_with_parameters import DictPatcher
 from cosmotech_api import Scenario
 
 
 def apply_update(content: dict, scenario_data: Scenario) -> dict:
     dataset_content = content
-    # Apply you transformation here
     for dataset_id, dataset in content['datasets'].items():
         if dataset['type'] in ['adt', 'twincache']:
             dataset_content = dataset['content']
             continue
         if dataset['name'] == 'mass_lever_excel_file':
             mass_action_lever_content = dataset['content']
-            _r = MemoryFolderIO()
-            _r.files = mass_action_lever_content
-            _w = MemoryFolderIO()
-            with FromTableToDictConverter(reader=_r, writer=_w) as td:
-                td.convert_all()
-            dataset_content = _w.files
-            break
+
+    if scenario_data.run_template_id == "SafetyStocks":
+        _r = MemoryFolderIO()
+        _r.files = mass_action_lever_content
+        _w = MemoryFolderIO()
+        
+        with FromDictToTableConverter(reader=_r, writer=_w, simulation_id=None, keep_duplicate=True) as dt:
+            dt.convert()
+        
+        columns_names = ['StockName', 'Step', 'PartId', 'SafetyStockLevels']
+        columns = [{'field': _name} for _name in columns_names]
+
+        for c in columns:
+            if c['field'] in ['StockName', 'Step', 'PartId']:
+                c['type'] = ['nonEditable', 'nonResizable']
+            if c['field'] in ['SafetyStockLevels']:
+                c['type'] = ['number']
+                c['minValue'] = 0
+
+        return {'columns': columns, 'rows': _w.files['SafetyStocks']}
 
     tmp_parameter_dir = tempfile.mkdtemp()
     tmp_parameter_file = os.path.join(tmp_parameter_dir, "parameters.json")
@@ -55,6 +68,7 @@ def apply_update(content: dict, scenario_data: Scenario) -> dict:
         add_file_parameter("demand_plan")
         add_file_parameter("transport_duration")
         add_file_parameter("production_resource_opening_time")
+        add_file_parameter("safety_stocks_tab")  # 
         if value in content['datasets']:
             continue
         parameters.append({
