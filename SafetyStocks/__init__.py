@@ -29,8 +29,8 @@ def apply_update(content: dict, scenario_data: Scenario) -> dict:
             c['type'] = ['number']
             c['minValue'] = 0
     out = list()
-    for element in w.files['SafetyStocks']:
-        out.append(dict(StockName=element['StockName'], Step=element['Step'], PartId=element['PartId'], SafetyStockLevels=element['SafetyStockLevels']))
+    for element in w.files['Stocks']:
+        out.append(dict(StockName=element['StockName'], Step=element['Step'], PartId=element['PartId'], SafetyStockLevels=element.get('SafetyQuantities',dict()).get('0',0)))
     return {'columns': columns, 'rows': sorted(out, key=lambda r: r['StockName'])}
 
 
