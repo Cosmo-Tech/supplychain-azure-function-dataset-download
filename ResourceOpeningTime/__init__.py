@@ -21,15 +21,12 @@ def apply_update(content: dict, scenario_data: Scenario) -> dict:
     with FromDictToTableConverter(reader=r, writer=w, simulation_id=None, keep_duplicate=True) as dt:
         dt.convert()
 
-    columns_names = ['id', 'Timestep', 'OpeningTimes']
+    columns_names = ['id', 'Timestep']
     columns = [{'field': _name} for _name in columns_names]
 
     for c in columns:
         if c['field'] in ['id', 'Timestep']:
             c['type'] = ['nonEditable']
-        if c['field'] in ['OpeningTimes']:
-            c['type'] = ['number']
-            c['minValue'] = 0
 
     rows = []
     for row in w.files['ProductionResourceSchedules']:

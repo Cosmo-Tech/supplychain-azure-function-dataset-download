@@ -53,7 +53,7 @@ def apply_update(content: dict, scenario_data: Scenario) -> dict:
                 })
 
         add_file_parameter("demand_plan")
-        add_file_parameter("transport_duration")
+        add_file_parameter("transportation_lead_time")
         add_file_parameter("production_resource_opening_time")
         if value in content['datasets']:
             continue
